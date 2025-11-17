@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Slideshow: Urheberrecht</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { margin:0; background:#000; color:#fff; font-family:sans-serif;
+           display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; }
+    #media-container { max-width:90vw; max-height:70vh; display:flex; align-items:center; justify-content:center; }
+    img, iframe { max-width:100%; max-height:100%; border:2px solid #fff; background:#000; box-sizing:border-box; }
+    .controls { margin-top:16px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+    .controls button { padding:10px 16px; font-size:16px; cursor:pointer; background:#1a1a1a; color:#fff; border:1px solid #333; border-radius:999px; }
+    .controls button:hover { background:#232323; }
+    #note { margin-top:10px; color:#ccc; font-size:14px; min-height:1.2em; }
+  </style>
+</head>
+<body>
+  <div id="media-container" aria-live="polite"></div>
+  <p id="note"></p>
+  <div class="controls">
+    <button onclick="prev()">Zurück</button>
+    <button onclick="next()">Weiter</button>
+    <button onclick="goToMap()">Zurück zur Karte</button>
+  </div>
+
+  <script>
+    // Reihenfolge: Folie1 → Video → Folie2 → Folie3
+    // YouTube-Schema: 'yt|VIDEO_ID|start||Hinweistext'
+    const slides = [
+      'Folie1.jpeg',
+      'yt|MzJD55HNXvA|313||Bitte bei 6:45 stoppen',
+      'Folie2.jpeg',
+      'Folie3.jpeg'
+    ];
+
+    let current = 0;
+
+    function buildYouTubeIframe(videoId, start) {
+      const params = new URLSearchParams({ rel:0, modestbranding:1, controls:1, start:start||0, hl:'de' });
+      const src = `https://www.youtube.com/embed/${videoId}?` + params.toString();
+      const iframe = document.createElement('iframe');
+      iframe.width = 960; iframe.height = 540; iframe.src = src; iframe.title = "YouTube video player";
+      iframe.setAttribute('allow','accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+      iframe.setAttribute('allowfullscreen','true');
+      return iframe;
+    }
+
+    function showSlide(index) {
+      const container = document.getElementById('media-container');
+      const note = document.getElementById('note');
+      container.innerHTML = ''; note.textContent = '';
+      const entry = slides[index];
+      if (typeof entry === 'string' && entry.startsWith('yt|')) {
+        const parts = entry.split('|'); // yt|id|start||note
+        const vid = parts[1]; const start = parts[2]?parseInt(parts[2],10):0; const hint = parts[4]?parts[4]:'';
+        container.appendChild(buildYouTubeIframe(vid, start)); note.textContent = hint;
+      } else if (typeof entry === 'string') {
+        const img = document.createElement('img'); img.src = entry; img.alt = 'Folie'; container.appendChild(img);
+      } else {
+        const p = document.createElement('p'); p.textContent = 'Unbekanntes Slide-Format'; container.appendChild(p);
+      }
+    }
+
+    function next(){ if(current < slides.length-1){ current++; showSlide(current);} }
+    function prev(){ if(current > 0){ current--; showSlide(current);} }
+    function goToMap(){ if(document.referrer){ history.back(); } else { window.location.href = '../index.html'; } }
+
+    // Initialanzeige
+    showSlide(current);
+  </script>
+</body>
+</html>

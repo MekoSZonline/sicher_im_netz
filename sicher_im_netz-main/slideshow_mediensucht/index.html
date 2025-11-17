@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Slideshow: Mediensucht</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: black;
+            color: white;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        #media-container {
+            max-width: 90vw;
+            max-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            border: 2px solid white;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="media-container"></div>
+    <div class="controls">
+        <button onclick="prev()">Zurück</button>
+        <button onclick="next()">Weiter</button>
+        <button onclick="goToMap()">Zurück zur Karte</button>
+    </div>
+
+    <script>
+        const slides = [
+            'Folie1.jpeg',
+            'Folie2.jpeg',
+            'Folie3.jpeg'
+        ];
+
+        let current = 0;
+
+        function showSlide(index) {
+            const container = document.getElementById('media-container');
+            container.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = slides[index];
+            container.appendChild(img);
+        }
+
+        function next() {
+            if (current < slides.length - 1) {
+                current++;
+                showSlide(current);
+            }
+        }
+
+        function prev() {
+            if (current > 0) {
+                current--;
+                showSlide(current);
+            }
+        }
+
+        function goToMap() {
+            window.location.href = '../index.html';
+        }
+
+        // Initialanzeige
+        showSlide(current);
+    </script>
+</body>
+</html>

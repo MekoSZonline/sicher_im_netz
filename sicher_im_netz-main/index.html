@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Sicher im Netz</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: black;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+        #karte-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            max-width: 1152px;
+            margin: auto;
+        }
+        #karte-container img {
+            width: 100%;
+            height: auto;
+            max-height: 95vh;
+            object-fit: contain;
+            display: block;
+        }
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+        }
+        #videoPlayer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            color: white;
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        video {
+            max-height: 85vh;
+            max-width: 85vw;
+            height: auto;
+            width: auto;
+            border: 2px solid white;
+        }
+        .button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="karte-container">
+        <img src="assets/karte.png" alt="Interaktive Karte">
+        <div class="hotspot" style="top:6%;left:10%;width:30%;height:18%;" onclick="window.location.href='slideshow_datenschutz/index.html'"></div>
+        <div class="hotspot" style="top:7%;left:60%;width:25%;height:15%;" onclick="window.location.href='slideshow_fake_news/index.html'"></div>
+        <div class="hotspot" style="top:34%;left:35%;width:25%;height:13%;" onclick="window.location.href='slideshow_cybergrooming/index.html'"></div>
+        <div class="hotspot" style="top:55%;left:12%;width:25%;height:13%;" onclick="window.location.href='slideshow_hacker/index.html'"></div>
+        <div class="hotspot" style="top:72%;left:10%;width:25%;height:13%;" onclick="window.location.href='slideshow_cybermobbing/index.html'"></div>
+        <div class="hotspot" style="top:30%;left:65%;width:30%;height:18%;" onclick="window.location.href='slideshow_urheberrecht/index.html'"></div>
+        <div class="hotspot" style="top:73%;left:58%;width:30%;height:20%;" onclick="playVideo('mediensucht.mp4')"></div>
+    </div>
+
+    <div id="videoPlayer">
+        <video id="video" controls></video>
+        <button class="button" onclick="goBack()">Zurück zur Karte</button>
+    </div>
+
+    <script>
+        function playVideo(filename) {
+            document.getElementById('karte-container').style.display = 'none';
+            var player = document.getElementById('videoPlayer');
+            var video = document.getElementById('video');
+            video.src = 'videos/' + filename;
+            player.style.display = 'flex';
+            video.play();
+        }
+        function goBack() {
+            var player = document.getElementById('videoPlayer');
+            var video = document.getElementById('video');
+            video.pause();
+            video.src = "";
+            player.style.display = 'none';
+            document.getElementById('karte-container').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
